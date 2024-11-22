@@ -4,6 +4,10 @@
 
 TTV (Ton TokenVigil Analytics) is an AI-powered sophisticated token analysis platform specialized in TON coin security and risk assessment. The platform combines real-time monitoring of smart contract behaviors, holder distributions, and market activities with advanced machine learning algorithms for predictive risk analysis. TTV provides comprehensive tools for detecting honeypot contracts, identifying fake contracts, and analyzing jettons and NFTs to enhance security and transparency within the TON ecosystem.
 
+## Bot
+
+[https://t.me/tonTokenVigil_bot](https://t.me/tonTokenVigil_bot)
+
 ## Features
 
 ### HoneyPot

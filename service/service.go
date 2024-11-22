@@ -1,7 +1,7 @@
 package service
 
 import (
-	api "github.com/go-telegram-bot-api/telegram-bot-api"
+	api "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"log"
 	"strconv"
 	"strings"
@@ -57,6 +57,32 @@ func NewService(botToken string, debug bool, timeout int, apiKey string) *Servic
 }
 
 func (s *Service) init() {
+	// 设置命令列表
+
+	commands := []api.BotCommand{
+		{Command: model.StartCommand, Description: "Start the bot."},
+		{Command: model.FakeCommand, Description: "Detect fake contracts with the same name."},
+		{Command: model.HoneyPotCommand, Description: "Detect honeypot contracts."},
+		{Command: model.NFTCommand, Description: "Query NFTs, including personal NFT assets, NFT collection, and NFT items."},
+		{Command: model.JettonsCommand, Description: "Query jettons, including ston.fi new pools, jetton holders, 24-hour trading volume, jetton top 10 holders, jetton balance."},
+		{Command: model.JetttonNewPoolsCommand, Description: "Detect new jetton pools created in the last 24 hours."},
+		{Command: model.FakeAccountCommand, Description: "Detect accounts that impersonate legitimate accounts with the same name."},
+		{Command: model.FakeJettonCommand, Description: "Detect fake jettons that mimic real tokens."},
+		{Command: model.FakeNFTCommand, Description: "Detect fake NFTs, including fake collections and items."},
+		{Command: model.JettonHolderCommand, Description: "Monitor the number of jetton holders."},
+		{Command: model.JettonChangesCommand, Description: "Track the 24-hour jetton changes and turnover rate."},
+		{Command: model.JettonAmountCommand, Description: "Track the 24-hour jetton amounts (volume)."},
+		{Command: model.JettonTopHoldersCommand, Description: "Monitor the top 10 jetton holders."},
+		{Command: model.JettonBalanceCommand, Description: "Monitor the balance of jetton holders."},
+		{Command: model.NFTCollectionCommand, Description: "Retrieve NFT collections and their items."},
+		{Command: model.NFTItemCommand, Description: "Find the collection for a specific NFT item."},
+		{Command: model.NFTAssetCommand, Description: "Query personal NFT assets."},
+	}
+
+	newCommands := api.NewSetMyCommands(commands...)
+	if _, err := s.bot.Request(newCommands); err != nil {
+		log.Println("Unable to set commands" + err.Error())
+	}
 	s.commandFunctions[model.StartCommand] = s.handleStartCommand
 	s.commandFunctions[model.FakeCommand] = s.handleFakeCommand
 	s.commandFunctions[model.FakeAccountCommand] = s.handleFakeTypeCommand
@@ -96,10 +122,7 @@ func (s *Service) init() {
 }
 func (s *Service) Start() {
 	s.init()
-	updates, err := s.bot.GetUpdatesChan(s.config)
-	if err != nil {
-		panic("Can't get Updates")
-	}
+	updates := s.bot.GetUpdatesChan(s.config)
 	for update := range updates {
 		if update.CallbackQuery != nil {
 			go s.processCallBack(&update)

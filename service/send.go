@@ -1,7 +1,7 @@
 package service
 
 import (
-	api "github.com/go-telegram-bot-api/telegram-bot-api"
+	api "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"log"
 	"time"
 )
@@ -46,5 +46,13 @@ func (s *Service) SendMessage(msg api.Chattable) api.Message {
 
 func (s *Service) deleteMessage(gid int64, mid int) {
 	time.Sleep(time.Second * 240)
-	_, _ = s.bot.DeleteMessage(api.NewDeleteMessage(gid, mid))
+	deleteMessageConfig := api.DeleteMessageConfig{
+		ChatID:    gid,
+		MessageID: mid,
+	}
+	_, err := s.bot.Request(deleteMessageConfig)
+
+	if err != nil {
+		log.Println(err.Error())
+	}
 }
