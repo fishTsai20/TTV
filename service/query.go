@@ -21,7 +21,7 @@ func (s *Service) queryJettonHolderCountAmount(addr *model.TonAddr, msg api.Chat
 	}
 	ret, ok := res.Data.Data[0][0].(float64)
 	if !ok {
-		return 0, fmt.Errorf("turn query res into float64 failed", zap.Any("res", res.Data.Data[0]))
+		return 0, fmt.Errorf("turn query res into float64 failed, %+v", zap.Any("res", res.Data.Data[0]))
 	}
 	return ret, nil
 }
@@ -33,7 +33,7 @@ func (s *Service) queryJettonTotalAmount(addr *model.TonAddr, msg api.Chattable)
 	}
 	ret, ok := res.Data.Data[0][0].(float64)
 	if !ok {
-		return 0, fmt.Errorf("turn query res into float64 failed", zap.Any("res", res.Data.Data[0]))
+		return 0, fmt.Errorf("turn query res into float64 failed, %+v", zap.Any("res", res.Data.Data[0]))
 	}
 	return ret, nil
 }
@@ -45,7 +45,7 @@ func (s *Service) queryJetton24hVol(addr *model.TonAddr, msg api.Chattable) (flo
 	}
 	ret, ok := res.Data.Data[0][0].(float64)
 	if !ok {
-		return 0, fmt.Errorf("turn query res into float64 failed", zap.Any("res", res.Data.Data[0]))
+		return 0, fmt.Errorf("turn query res into float64 failed, %+v", zap.Any("res", res.Data.Data[0]))
 	}
 	return ret, nil
 }
@@ -297,4 +297,20 @@ func (s *Service) queryNFTAssetsByWallet(addr *model.TonAddr, limit int, msg api
 		}
 		return NFTs, nil
 	}
+}
+
+func (s *Service) queryIsContractDeployed(addr *model.TonAddr, msg api.Chattable) (bool, error) {
+	res, err := s.query("690304", map[string]string{"account": addr.MainnetBounceable}, msg)
+	if err != nil {
+		fmt.Println(err.Error())
+		return false, err
+	}
+	ret, ok := res.Data.Data[0][0].(float64)
+	if !ok {
+		return false, fmt.Errorf("turn query res into bool failed, %+v", zap.Any("res", res.Data.Data[0]))
+	}
+	if ret == 1 {
+		return true, nil
+	}
+	return false, nil
 }

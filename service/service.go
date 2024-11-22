@@ -73,6 +73,7 @@ func (s *Service) init() {
 	s.commandFunctions[model.NFTItemCommand] = s.handleNFTItemCommand
 	s.commandFunctions[model.NFTAssetCommand] = s.handleNFTAssetsCommand
 	s.commandFunctions[model.NFTCommand] = s.handleNFTsCommand
+	s.commandFunctions[model.HoneyPotCommand] = s.handleHoneyPotCommand
 
 	s.replyFunctions[model.FakeAccountCommand] = s.replyFakeAccountCommand
 	s.replyFunctions[model.FakeJettonCommand] = s.replyFakeJettonCommand
@@ -85,6 +86,7 @@ func (s *Service) init() {
 	s.replyFunctions[model.NFTCollectionCommand] = s.replyNFTCollectionsCommand
 	s.replyFunctions[model.NFTAssetCommand] = s.replyNFTAssetsCommand
 	s.replyFunctions[model.NFTItemCommand] = s.replyNFTItemCommand
+	s.replyFunctions[model.HoneyPotCommand] = s.replyHoneyPotCommand
 
 	s.pageFunctions[model.NFTCollectionCommand] = s.replyNFTCollectionPage
 	s.pageFunctions[model.NFTAssetCommand] = s.replyNFTAssetsPage
