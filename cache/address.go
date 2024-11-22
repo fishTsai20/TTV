@@ -21,29 +21,26 @@ type ValidCache struct {
 }
 
 func NewValidCache() *ValidCache {
-	return &ValidCache{}
+	return &ValidCache{
+		nameMap:    make(map[string]*model.TonAddr),
+		addressMap: make(map[string]string),
+	}
 }
 
 func (v *ValidCache) initializeAccounts() {
 	v.initAccount.Do(func() {
-		v.nameMap = make(map[string]*model.TonAddr)
-		v.addressMap = make(map[string]string)
 		getAddressNameMap(v.nameMap, v.addressMap, "tonkeeper", "ton-assets", "accounts")
 	})
 }
 
 func (v *ValidCache) initializeJettons() {
 	v.initJetton.Do(func() {
-		v.nameMap = make(map[string]*model.TonAddr)
-		v.addressMap = make(map[string]string)
 		getAddressNameMap(v.nameMap, v.addressMap, "tonkeeper", "ton-assets", "jettons")
 	})
 }
 
 func (v *ValidCache) initializeNFTs() {
 	v.initNFT.Do(func() {
-		v.nameMap = make(map[string]*model.TonAddr)
-		v.addressMap = make(map[string]string)
 		getAddressNameMap(v.nameMap, v.addressMap, "tonkeeper", "ton-assets", "collections")
 	})
 }

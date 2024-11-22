@@ -10,7 +10,7 @@ import (
 func (s *Service) handleFakeCommand(upmsg *api.Message) {
 	msg := api.NewMessage(upmsg.Chat.ID, "")
 	msg.Text = "⁉️ Please select the type you want to query for fake\n"
-	keyboardMarkup := api.NewInlineKeyboardMarkup(api.NewInlineKeyboardRow(api.NewInlineKeyboardButtonData("👻Account", "fakeAccount"), api.NewInlineKeyboardButtonData("💰Jetton", "fakeJetton"), api.NewInlineKeyboardButtonData("💠NFT", "fakeNFT")))
+	keyboardMarkup := api.NewInlineKeyboardMarkup(api.NewInlineKeyboardRow(api.NewInlineKeyboardButtonData("👻Account", model.FakeAccountCommand), api.NewInlineKeyboardButtonData("💰Jetton", model.FakeJettonCommand), api.NewInlineKeyboardButtonData("💠NFT", model.FakeNFTCommand)))
 	msg.ReplyMarkup = keyboardMarkup
 	s.SendMessage(msg)
 }
@@ -51,7 +51,7 @@ func (s *Service) replyFakeAccountCommand(upmsg *api.Message) {
 					msg.Text = "❌ *Fake*\n\n*Name*:" + acc.Name + "\n" + fmt.Sprintf("%+v", addr) + "\n"
 				}
 			} else {
-				msg.Text = "❓Unable to verify \n" + fmt.Sprintf("%+v", acc) + "\n"
+				msg.Text = "❓Unable to verify account\n" + fmt.Sprintf("%+v", acc) + "\n"
 			}
 		}
 
@@ -88,7 +88,7 @@ func (s *Service) replyFakeJettonCommand(upmsg *api.Message) {
 					msg.Text = "❌ *Fake*\n\n*Name*:" + acc.Name + "\n" + fmt.Sprintf("%+v", addr) + "\n"
 				}
 			} else {
-				msg.Text = "❓Unable to verify \n" + fmt.Sprintf("%+v", acc) + "\n"
+				msg.Text = "❓Unable to verify jetton\n" + fmt.Sprintf("%+v", acc) + "\n"
 			}
 		}
 
@@ -125,7 +125,7 @@ func (s *Service) replyFakeNFTCommand(upmsg *api.Message) {
 					msg.Text = "❌ *Fake*\n\n*Name*:" + acc.Name + "\n" + fmt.Sprintf("%+v", addr) + "\n"
 				}
 			} else {
-				msg.Text = "❓Unable to verify \n" + fmt.Sprintf("%+v", acc) + "\n"
+				msg.Text = "❓Unable to verify nft\n" + fmt.Sprintf("%+v", acc) + "\n"
 			}
 		}
 

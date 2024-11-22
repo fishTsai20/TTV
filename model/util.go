@@ -18,14 +18,11 @@ func FormatNumber(value float64) string {
 }
 
 func EscapeMarkdownV2(input string) string {
-	specialChars := []string{"_", "*", "[", "]", "(", ")", "~", "`", ">", "#", "+", "-", "=", "|", "{", "}", ".", "!"}
-	escaped := input
-
+	specialChars := []string{"_", "*", "[", "]", "(", ")", "~", "`", ">", "#", "+", "=", "|", "{", "}", ".", "!"}
 	for _, char := range specialChars {
-		escaped = strings.ReplaceAll(escaped, char, "\\"+char)
+		input = strings.ReplaceAll(input, char, "\\"+char)
 	}
-
-	return escaped
+	return input
 }
 
 type TgText interface {

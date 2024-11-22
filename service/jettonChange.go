@@ -25,7 +25,7 @@ func (s *Service) replyJettonChangeCommand(upmsg *api.Message) {
 		msg.Text = "invalid address, " + err.Error() + "\n"
 	} else {
 		totalAmount, err := s.queryJettonTotalAmount(addr, msg)
-		if err != nil {
+		if err != nil || totalAmount == -1 {
 			log.Info("query total amount failed", zap.Error(err))
 			msg.Text = "failed to get jetton's change\n"
 		} else {
