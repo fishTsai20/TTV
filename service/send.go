@@ -17,7 +17,6 @@ func (s *Service) SendMessage(msg api.Chattable) api.Message {
 		if err != nil {
 			log.Println(err)
 		}
-		go s.deleteMessage(v.ChatID, mmsg.MessageID)
 		return mmsg
 	case api.EditMessageTextConfig:
 		if v.Text == "" {
@@ -28,7 +27,6 @@ func (s *Service) SendMessage(msg api.Chattable) api.Message {
 		if err != nil {
 			log.Println(err)
 		}
-		go s.deleteMessage(v.ChatID, mmsg.MessageID)
 		return mmsg
 	case api.EditMessageReplyMarkupConfig:
 		if v.ReplyMarkup == nil {
@@ -38,7 +36,6 @@ func (s *Service) SendMessage(msg api.Chattable) api.Message {
 		if err != nil {
 			log.Println(err)
 		}
-		go s.deleteMessage(v.ChatID, mmsg.MessageID)
 		return mmsg
 	}
 	return api.Message{}

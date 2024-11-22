@@ -22,7 +22,7 @@ func (s *Service) replyJettonHoldersCommand(upmsg *api.Message) {
 		msg.Text = "invalid address, " + err.Error() + "\n"
 	} else {
 		holder, err := s.queryJettonHolderCountAmount(addr, msg)
-		if err != nil {
+		if err != nil || holder == -1 {
 			msg.Text = "failed to get jetton's holders\n"
 		} else {
 			msg.Text = "👥 *Holders*: " + fmt.Sprintf("%+v", holder) + "\n\n" + fmt.Sprintf("%+v", addr) + "\n"

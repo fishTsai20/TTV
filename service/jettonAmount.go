@@ -23,7 +23,7 @@ func (s *Service) replyJettonAmountCommand(upmsg *api.Message) {
 		msg.Text = "invalid address: " + contract + ", " + err.Error() + "\n"
 	} else {
 		vol, err := s.queryJetton24hVol(addr, msg)
-		if err != nil {
+		if err != nil || vol == -1 {
 			msg.Text = "failed to get jetton's change\n"
 		} else {
 			msg.Text = "🛰️ *24h amount*: " + model.FormatNumber(vol) + "\n\n" + fmt.Sprintf("%+v", addr) + "\n"

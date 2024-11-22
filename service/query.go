@@ -19,6 +19,9 @@ func (s *Service) queryJettonHolderCountAmount(addr *model.TonAddr, msg api.Chat
 	if err != nil {
 		return 0, err
 	}
+	if len(res.Data.Data) == 0 {
+		return -1, nil
+	}
 	ret, ok := res.Data.Data[0][0].(float64)
 	if !ok {
 		return 0, fmt.Errorf("turn query res into float64 failed, %+v", zap.Any("res", res.Data.Data[0]))
@@ -30,6 +33,9 @@ func (s *Service) queryJettonTotalAmount(addr *model.TonAddr, msg api.Chattable)
 	res, err := s.query("690295", map[string]string{"jetton_master": addr.MainnetBounceable}, msg)
 	if err != nil {
 		return 0, err
+	}
+	if len(res.Data.Data) == 0 {
+		return -1, nil
 	}
 	ret, ok := res.Data.Data[0][0].(float64)
 	if !ok {
@@ -43,6 +49,9 @@ func (s *Service) queryJetton24hVol(addr *model.TonAddr, msg api.Chattable) (flo
 	if err != nil {
 		return 0, err
 	}
+	if len(res.Data.Data) == 0 {
+		return -1, nil
+	}
 	ret, ok := res.Data.Data[0][0].(float64)
 	if !ok {
 		return 0, fmt.Errorf("turn query res into float64 failed, %+v", zap.Any("res", res.Data.Data[0]))
@@ -51,7 +60,7 @@ func (s *Service) queryJetton24hVol(addr *model.TonAddr, msg api.Chattable) (flo
 }
 
 func (s *Service) query24HJettonNewPools(msg api.Chattable) ([]model.Pool, error) {
-	res, err := s.query("690291", map[string]string{"interval": "7"}, msg)
+	res, err := s.query("690291", map[string]string{"interval": "1"}, msg)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get ston.fi new pools")
 	} else {
@@ -304,6 +313,9 @@ func (s *Service) queryIsContractDeployed(addr *model.TonAddr, msg api.Chattable
 	if err != nil {
 		fmt.Println(err.Error())
 		return false, err
+	}
+	if len(res.Data.Data) == 0 {
+		return false, nil
 	}
 	ret, ok := res.Data.Data[0][0].(float64)
 	if !ok {
