@@ -2,7 +2,7 @@ package service
 
 import (
 	"encoding/json"
-	api "github.com/go-telegram-bot-api/telegram-bot-api"
+	api "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"go.uber.org/zap"
 	"ttv-bot/log"
 	"ttv-bot/model"

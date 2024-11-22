@@ -1,7 +1,7 @@
 package service
 
 import (
-	api "github.com/go-telegram-bot-api/telegram-bot-api"
+	api "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"ttv-bot/model"
 )
 
