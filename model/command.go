@@ -23,4 +23,5 @@ const (
 	NFTCollectionCommand    = "nftCollection"
 	NFTItemCommand          = "nftItem"
 	NFTAssetCommand         = "nftAsset"
+	HelpCommand             = "help"
 )

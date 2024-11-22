@@ -74,6 +74,7 @@ func (s *Service) init() {
 	s.commandFunctions[model.NFTAssetCommand] = s.handleNFTAssetsCommand
 	s.commandFunctions[model.NFTCommand] = s.handleNFTsCommand
 	s.commandFunctions[model.HoneyPotCommand] = s.handleHoneyPotCommand
+	s.commandFunctions[model.HelpCommand] = s.handleHelpCommand
 
 	s.replyFunctions[model.FakeAccountCommand] = s.replyFakeAccountCommand
 	s.replyFunctions[model.FakeJettonCommand] = s.replyFakeJettonCommand
