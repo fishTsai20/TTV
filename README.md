@@ -83,7 +83,7 @@ To use any of the commands, simply input the desired command in the format below
     ```
 4. Run the bot with a token and API key:
     ```
-   ./ttv-bot --bot-token <your-bot-token> --api-key <your-api-key>
+   ./ttv-bot ttv-bot --bot-token <your-bot-token> --api-key <your-api-key>
    ```
 ## License
 
