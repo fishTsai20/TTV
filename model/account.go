@@ -105,3 +105,10 @@ func (a Account) String() string {
 	sb.WriteString(fmt.Sprintf("*Name*: %s\n", a.Name))
 	return sb.String()
 }
+
+func (a Account) ToTgText() string {
+	res := "\n"
+	res += "*Name: *" + a.Name + "\n"
+	res += "*Address: *[" + a.Address + "](https://tonscan.org/address/" + a.Address + ")\n"
+	return res
+}

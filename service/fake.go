@@ -37,16 +37,16 @@ func (s *Service) replyFakeAccountCommand(upmsg *api.Message) {
 			prMsg := api.NewMessage(upmsg.Chat.ID, "🔍 processing....")
 			prMsg.ReplyToMessageID = upmsg.MessageID
 			s.SendMessage(prMsg)
-			if name := s.validCache.GetAccountNameByAddress(tonAddr); name != "" {
+			if name := s.validAccountsCache.GetAccountNameByAddress(tonAddr); name != "" {
 				if name == acc.Name {
 					msg.Text = "⭕️ *Valid*\n\n*Name*:" + acc.Name + "\n" + fmt.Sprintf("%+v", tonAddr) + "\n"
 				} else {
 					msg.Text = "❗️*Fake*\n\n*Name*:" + name + "\n" + fmt.Sprintf("%+v", tonAddr) + "\n"
-					if addr := s.validCache.GetAccountAddressByName(acc.Name); addr != nil {
+					if addr := s.validAccountsCache.GetAccountAddressByName(acc.Name); addr != nil {
 						msg.Text = msg.Text + "\n*Name*:" + acc.Name + "\n" + fmt.Sprintf("%+v", addr) + "\n"
 					}
 				}
-			} else if addr := s.validCache.GetAccountAddressByName(acc.Name); addr != nil {
+			} else if addr := s.validAccountsCache.GetAccountAddressByName(acc.Name); addr != nil {
 				if addr.Hex != tonAddr.Hex {
 					msg.Text = "❌ *Fake*\n\n*Name*:" + acc.Name + "\n" + fmt.Sprintf("%+v", addr) + "\n"
 				}
@@ -74,16 +74,16 @@ func (s *Service) replyFakeJettonCommand(upmsg *api.Message) {
 			prMsg := api.NewMessage(upmsg.Chat.ID, "🔍 processing....")
 			prMsg.ReplyToMessageID = upmsg.MessageID
 			s.SendMessage(prMsg)
-			if name := s.validCache.GetJettonNameByAddress(tonAddr); name != "" {
+			if name := s.validJettonsCache.GetJettonNameByAddress(tonAddr); name != "" {
 				if name == acc.Name {
 					msg.Text = "⭕️ *Valid*\n\n*Name*:" + acc.Name + "\n" + fmt.Sprintf("%+v", tonAddr) + "\n"
 				} else {
 					msg.Text = "❗️*Fake*\n\n*Name*:" + name + "\n" + fmt.Sprintf("%+v", tonAddr) + "\n"
-					if addr := s.validCache.GetJettonAddressByName(acc.Name); addr != nil {
+					if addr := s.validJettonsCache.GetJettonAddressByName(acc.Name); addr != nil {
 						msg.Text = msg.Text + "\n*Name*:" + acc.Name + "\n" + fmt.Sprintf("%+v", addr) + "\n"
 					}
 				}
-			} else if addr := s.validCache.GetJettonAddressByName(acc.Name); addr != nil {
+			} else if addr := s.validJettonsCache.GetJettonAddressByName(acc.Name); addr != nil {
 				if addr.Hex != tonAddr.Hex {
 					msg.Text = "❌ *Fake*\n\n*Name*:" + acc.Name + "\n" + fmt.Sprintf("%+v", addr) + "\n"
 				}
@@ -111,16 +111,16 @@ func (s *Service) replyFakeNFTCommand(upmsg *api.Message) {
 			prMsg := api.NewMessage(upmsg.Chat.ID, "🔍 processing....")
 			prMsg.ReplyToMessageID = upmsg.MessageID
 			s.SendMessage(prMsg)
-			if name := s.validCache.GetNFTNameByAddress(tonAddr); name != "" {
+			if name := s.validNFTsCache.GetNFTNameByAddress(tonAddr); name != "" {
 				if name == acc.Name {
 					msg.Text = "⭕️ *Valid*\n\n*Name*:" + acc.Name + "\n" + fmt.Sprintf("%+v", tonAddr) + "\n"
 				} else {
 					msg.Text = "❗️*Fake*\n\n*Name*:" + name + "\n" + fmt.Sprintf("%+v", tonAddr) + "\n"
-					if addr := s.validCache.GetNFTAddressByName(acc.Name); addr != nil {
+					if addr := s.validNFTsCache.GetNFTAddressByName(acc.Name); addr != nil {
 						msg.Text = msg.Text + "\n*Name*:" + acc.Name + "\n" + fmt.Sprintf("%+v", addr) + "\n"
 					}
 				}
-			} else if addr := s.validCache.GetNFTAddressByName(acc.Name); addr != nil {
+			} else if addr := s.validNFTsCache.GetNFTAddressByName(acc.Name); addr != nil {
 				if addr.Hex != tonAddr.Hex {
 					msg.Text = "❌ *Fake*\n\n*Name*:" + acc.Name + "\n" + fmt.Sprintf("%+v", addr) + "\n"
 				}

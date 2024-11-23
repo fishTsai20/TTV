@@ -40,25 +40,37 @@ NFT-related commands allow users to query and explore NFT collections, items, an
 
 ## TG Commands List
 
-| Command                | Description                                                               |
-|------------------------|---------------------------------------------------------------------------|
-| **start**              | Start the bot.                                                            |
-| **fake**               | Detect fake contracts with the same name.                               |
-| **honeyPot**           | Detect honeypot contracts.                                              |
-| **nfts**               | Query NFTs, including personal NFT assets, NFT collection, and NFT items. |
-| **jettons**            | Query jettons, including ston.fi new pools, jetton holders, 24-hour trading volume, jetton top 10 holders, jetton balance. |
-| **24HJetttonNewPools** | Detect new jetton pools created in the last 24 hours.                     |
-| **fakeAccount**        | Detect fake accounts with the same name as legitimate ones.               |
-| **fakeJetton**         | Detect fake jettons that mimic real tokens.                               |
-| **fakeNFT**            | Detect fake NFTs, including fake collections and items.                   |
-| **jettonHolder**       | Monitor the number of jetton holders.                                     |
-| **24HJettonChanges**   | Track the 24-hour jetton changes and turnover rate.                       |
-| **24HJettonAmounts**   | Track the 24-hour jetton amounts (volume).                                |
-| **jettonTop10**        | Monitor the top 10 jetton holders.                                        |
-| **jettonBalance**      | Monitor the balance of jetton holders.                                    |
-| **nftCollection**      | Retrieve the NFT collection and its items.                                |
-| **nftItem**            | Find the collection for a specific NFT item.                              |
-| **nftAsset**           | Query an individual's personal NFT assets.                                |
+| Command                 | Description                                                                                                                |
+|-------------------------|----------------------------------------------------------------------------------------------------------------------------|
+| **start**               | Start the bot.                                                                                                             |
+| **fake**                | Detect fake contracts with the same name.                                                                                  |
+| **honeyPot**            | Detect honeypot contracts.                                                                                                 |
+| **list**                | List Accounts, Jettons, NFTs                                                                                               |
+| **nfts**                | Query NFTs, including personal NFT assets, NFT collection, and NFT items.                                                  |
+| **jettons**             | Query jettons, including ston.fi new pools, jetton holders, 24-hour trading volume, jetton top 10 holders, jetton balance. |
+| **24HJetttonNewPools**  | Detect new jetton pools created in the last 24 hours.                                                                      |
+| **fakeAccount**         | Detect fake accounts with the same name as legitimate ones.                                                                |
+| **fakeJetton**          | Detect fake jettons that mimic real tokens.                                                                                |
+| **fakeNFT**             | Detect fake NFTs, including fake collections and items.                                                                    |
+| **jettonHolder**        | Monitor the number of jetton holders.                                                                                      |
+| **24HJettonChanges**    | Track the 24-hour jetton changes and turnover rate.                                                                        |
+| **24HJettonAmounts**    | Track the 24-hour jetton amounts (volume).                                                                                 |
+| **jettonTop10**         | Monitor the top 10 jetton holders.                                                                                         |
+| **jettonBalance**       | Monitor the balance of jetton holders.                                                                                     |
+| **nftCollection**       | Retrieve the NFT collection and its items.                                                                                 |
+| **nftItem**             | Find the collection for a specific NFT item.                                                                               |
+| **listaccounts**        | list accounts with name filter or not.                                                                                     |
+| **listaccountsbyname**  | list accounts with name filter.                                                                                            |
+| **listaccountsdefault** | list accounts without any filters.                                                                                         |
+| **listjettons**         | list jettons with name filter or not.                                                                                      |
+| **listjettonsbyname**   | list jettons with name filter.                                                                                             |
+| **listjettonsdefault**  | list jettons without any filters.                                                                                          |
+| **listnfts**            | list nfts with name filter or not.                                                                                         |
+| **listnftsbyname**      | list nfts with name filter.                                                                                                |
+| **listnftsdefault**     | list nfts without any filters.                                                                                             |
+| **nftAsset**            | Query an individual's personal NFT assets.                                                                                 |
+| **nftAsset**            | Query an individual's personal NFT assets.                                                                                 |
+| **nftAsset**            | Query an individual's personal NFT assets.                                                                                 |
 
 ## Usage
 
