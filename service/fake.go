@@ -15,9 +15,23 @@ func (s *Service) handleFakeCommand(upmsg *api.Message) {
 	s.SendMessage(msg)
 }
 
-func (s *Service) handleFakeTypeCommand(upmsg *api.Message) {
+func (s *Service) handleFakeAccountCommand(upmsg *api.Message) {
 	msg := api.NewMessage(upmsg.Chat.ID, "")
-	msg.Text = "👻 Please enter the *address* and *name* as shown in this example:\n\n----------\n`{\"address\":\"EQCMOXxD-f8LSWWbXQowKxqTr3zMY-X1wMTyWp3B-LR6s3Va\",\"name\":\"Telegram\"}`"
+	msg.Text = "👻 Please enter the *Account address* and *name* as shown in this example:\n\n----------\n`{\"address\":\"EQCMOXxD-f8LSWWbXQowKxqTr3zMY-X1wMTyWp3B-LR6s3Va\",\"name\":\"Telegram\"}`"
+	msg.ParseMode = api.ModeMarkdown
+	s.SendMessage(msg)
+}
+
+func (s *Service) handleFakeNFTCommand(upmsg *api.Message) {
+	msg := api.NewMessage(upmsg.Chat.ID, "")
+	msg.Text = "👻 Please enter the *NFT address* and *name* as shown in this example:\n\n----------\n`{\"address\":\"EQAZKtHcN6mhbzhbzcnuj-94r5P-hZYBKEwQ4_-dc-2AWMqZ\",\"name\":\"Spinners\"}`"
+	msg.ParseMode = api.ModeMarkdown
+	s.SendMessage(msg)
+}
+
+func (s *Service) handleFakeJettonCommand(upmsg *api.Message) {
+	msg := api.NewMessage(upmsg.Chat.ID, "")
+	msg.Text = "👻 Please enter the *Jetton address* and *name* as shown in this example:\n\n----------\n`{\"address\":\"EQCMOXxD-f8LSWWbXQowKxqTr3zMY-X1wMTyWp3B-LR6s3Va\",\"name\":\"STON\"}`"
 	msg.ParseMode = api.ModeMarkdown
 	s.SendMessage(msg)
 }

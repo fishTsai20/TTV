@@ -98,12 +98,13 @@ func (s *Service) init() {
 	if _, err := s.bot.Request(newCommands); err != nil {
 		log.Println("Unable to set commands" + err.Error())
 	}
+	//command
 	s.commandFunctions[model.StartCommand] = s.handleStartCommand
 	s.commandFunctions[model.FakeCommand] = s.handleFakeCommand
 	s.commandFunctions[model.ListCommand] = s.handleListCommand
-	s.commandFunctions[model.FakeAccountCommand] = s.handleFakeTypeCommand
-	s.commandFunctions[model.FakeJettonCommand] = s.handleFakeTypeCommand
-	s.commandFunctions[model.FakeNFTCommand] = s.handleFakeTypeCommand
+	s.commandFunctions[model.FakeAccountCommand] = s.handleFakeAccountCommand
+	s.commandFunctions[model.FakeJettonCommand] = s.handleFakeJettonCommand
+	s.commandFunctions[model.FakeNFTCommand] = s.handleFakeNFTCommand
 	s.commandFunctions[model.JettonHolderCommand] = s.handleJettonHoldersCommand
 	s.commandFunctions[model.JettonsCommand] = s.handleJettonsCommand
 	s.commandFunctions[model.ListJettonsCommand] = s.handleListJettonsCommand
@@ -112,14 +113,13 @@ func (s *Service) init() {
 	s.commandFunctions[model.ListAccountsCommand] = s.handleListAccountsCommand
 	s.commandFunctions[model.ListAccountsByNameCommand] = s.handleListAccountsByNameCommand
 	s.commandFunctions[model.ListAccountsDefaultCommand] = s.handleListAccountsDefaultCommand
-
 	s.commandFunctions[model.JetttonNewPoolsCommand] = s.handle24HJettonNewPoolsCommand
 	s.commandFunctions[model.JettonAmountCommand] = s.handleJettonAmountCommand
 	s.commandFunctions[model.JettonChangesCommand] = s.handleJettonChangeCommand
 	s.commandFunctions[model.JettonTopHoldersCommand] = s.handleJettonTopNCommand
 	s.commandFunctions[model.JettonBalanceCommand] = s.handleJettonBalanceCommand
-
 	s.commandFunctions[model.NFTCollectionCommand] = s.handleNFTCollectionCommand
+
 	s.commandFunctions[model.ListNFTsCommand] = s.handleListNFTsCommand
 	s.commandFunctions[model.ListNFTsByNameCommand] = s.handleListNFTsByNameCommand
 	s.commandFunctions[model.ListNFTsDefaultCommand] = s.handleListNFTsDefaultCommand
@@ -129,9 +129,13 @@ func (s *Service) init() {
 	s.commandFunctions[model.HoneyPotCommand] = s.handleHoneyPotCommand
 	s.commandFunctions[model.HelpCommand] = s.handleHelpCommand
 
+	//callback
 	s.replyFunctions[model.ListNFTsDefaultCommand] = s.replyListNFTsByNameCommand
-	s.replyFunctions[model.ListJettonsCommand] = s.replyListJettonsByNameCommand
-	s.replyFunctions[model.ListAccountsCommand] = s.replyListAccountsByNameCommand
+	s.replyFunctions[model.ListNFTsByNameCommand] = s.replyListNFTsByNameCommand
+	s.replyFunctions[model.ListJettonsDefaultCommand] = s.replyListJettonsByNameCommand
+	s.replyFunctions[model.ListJettonsByNameCommand] = s.replyListJettonsByNameCommand
+	s.replyFunctions[model.ListAccountsByNameCommand] = s.replyListAccountsByNameCommand
+	s.replyFunctions[model.ListAccountsByNameCommand] = s.replyListAccountsByNameCommand
 	s.replyFunctions[model.FakeAccountCommand] = s.replyFakeAccountCommand
 	s.replyFunctions[model.FakeJettonCommand] = s.replyFakeJettonCommand
 	s.replyFunctions[model.FakeNFTCommand] = s.replyFakeNFTCommand

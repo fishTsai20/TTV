@@ -82,18 +82,18 @@ func (s *Service) replyListNFTsPageWithName(upmsg *api.Message, page int, first 
 	}
 	pageSize := 3
 	text := ""
-	var jettons map[string]*model.TonAddr
+	var nfts map[string]*model.TonAddr
 	if name != "" {
-		jettons = s.validNFTsCache.FuzzyGET(name)
+		nfts = s.validNFTsCache.FuzzyGET(name)
 	} else {
-		jettons = s.validNFTsCache.GetAll()
+		nfts = s.validNFTsCache.GetAll()
 	}
-	if jettons == nil || len(jettons) == 0 {
+	if nfts == nil || len(nfts) == 0 {
 		text = "💰	There is no NFT to list"
 		s.chatMap.Delete(model.ListNFTsCommand)
 	} else {
-		totalPage := len(jettons) / pageSize
-		if len(jettons)%pageSize != 0 {
+		totalPage := len(nfts) / pageSize
+		if len(nfts)%pageSize != 0 {
 			totalPage++
 		}
 		if page >= totalPage {
@@ -108,7 +108,7 @@ func (s *Service) replyListNFTsPageWithName(upmsg *api.Message, page int, first 
 			return
 		}
 		var accs []model.Account
-		for name, addr := range jettons {
+		for name, addr := range nfts {
 			accs = append(accs, model.Account{
 				Address: addr.MainnetBounceable,
 				Name:    name,

@@ -7,7 +7,7 @@ import (
 
 func (s *Service) handleNFTItemCommand(upmsg *api.Message) {
 	msg := api.NewMessage(upmsg.Chat.ID, "")
-	msg.Text = "💎 Please enter the *nft item address*\n"
+	msg.Text = "💎 Please enter the *nft item address*, as shown in this example:\n" + model.EscapeMarkdownV2("EQA-eicE8ocvCGOOn4AOFKbllKNrsNMCzwPUeFX_aaokyKhE") + "\n"
 	msg.ParseMode = api.ModeMarkdown
 	s.SendMessage(msg)
 }
