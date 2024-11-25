@@ -64,6 +64,7 @@ func (s *Service) reply24HJettonNewPoolsCommand(upmsg *api.Message, page int, fi
 			s.SendMessage(msgk)
 			return
 		}
+		msg.Text = "We found " + fmt.Sprintf("%+v", len(pools)) + "🏊 on your request:\n"
 		msg.Text += s.formatPage(model.ConvertToTgTextSlice(pools), page, pageSize)
 		keyboard := api.NewInlineKeyboardMarkup(
 			api.NewInlineKeyboardRow(

@@ -8,7 +8,7 @@ import (
 
 func (s *Service) handleNFTAssetsCommand(upmsg *api.Message) {
 	msg := api.NewMessage(upmsg.Chat.ID, "")
-	msg.Text = "💠 Please enter the *wallet address*\n"
+	msg.Text = "💠 Please enter the *wallet address*, as shown in this example:\n" + model.EscapeMarkdownV2("EQAVKjQ5Gkj2GvO0_QpvlW-iC1WhiIG428zywVcP3-C7LPEi") + "\n"
 	msg.ParseMode = api.ModeMarkdown
 	s.SendMessage(msg)
 }

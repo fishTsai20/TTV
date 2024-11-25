@@ -17,7 +17,9 @@ type Service struct {
 	commandFunctions   map[string]func(*api.Message)
 	replyFunctions     map[string]func(message *api.Message)
 	pageFunctions      map[string]func(upmsg *api.Message, page int, first bool)
-	validCache         *cache.ValidCache
+	validAccountsCache *cache.ValidAccountsCache
+	validJettonsCache  *cache.ValidJettonsCache
+	validNFTsCache     *cache.ValidNFTsCache
 	client             *client.Client
 	chatMap            sync.Map
 	stonFiPoolsCache   *stonFiPoolsCache
@@ -38,12 +40,14 @@ func NewService(botToken string, debug bool, timeout int, apiKey string) *Servic
 	config := api.NewUpdate(0)
 	config.Timeout = timeout
 	return &Service{
-		bot:              bot,
-		config:           config,
-		commandFunctions: make(map[string]func(*api.Message)),
-		replyFunctions:   make(map[string]func(message *api.Message)),
-		pageFunctions:    make(map[string]func(upmsg *api.Message, page int, first bool)),
-		validCache:       cache.NewValidCache(),
+		bot:                bot,
+		config:             config,
+		commandFunctions:   make(map[string]func(*api.Message)),
+		replyFunctions:     make(map[string]func(message *api.Message)),
+		pageFunctions:      make(map[string]func(upmsg *api.Message, page int, first bool)),
+		validAccountsCache: cache.NewValidAccountsCache(),
+		validJettonsCache:  cache.NewValidJettonsCache(),
+		validNFTsCache:     cache.NewValidNFTsCache(),
 		client: &client.Client{
 			ApiKey:  apiKey,
 			BaseURL: "https://api.chainbase.com/api/v1",
@@ -61,10 +65,21 @@ func (s *Service) init() {
 
 	commands := []api.BotCommand{
 		{Command: model.StartCommand, Description: "Start the bot."},
+		{Command: model.ListCommand, Description: "List accounts, nfts, jettons."},
 		{Command: model.FakeCommand, Description: "Detect fake contracts with the same name."},
 		{Command: model.HoneyPotCommand, Description: "Detect honeypot contracts."},
 		{Command: model.NFTCommand, Description: "Query NFTs, including personal NFT assets, NFT collection, and NFT items."},
-		{Command: model.JettonsCommand, Description: "Query jettons, including ston.fi new pools, jetton holders, 24-hour trading volume, jetton top 10 holders, jetton balance."},
+		{Command: model.JettonsCommand, Description: " jettons, including ston.fi new pools, jetton holders, 24-hour trading volume, jetton top 10 holders, jetton balance."},
+		{Command: model.ListJettonsCommand, Description: "list Jettons"},
+		{Command: model.ListJettonsByNameCommand, Description: "list Jettons with name filter"},
+		{Command: model.ListJettonsDefaultCommand, Description: "list Jettons without any filters"},
+		{Command: model.ListAccountsCommand, Description: "list accounts"},
+		{Command: model.ListAccountsByNameCommand, Description: "list accounts with name filter"},
+		{Command: model.ListAccountsDefaultCommand, Description: "list accounts without any filters"},
+		{Command: model.ListNFTsCommand, Description: "list NFTs"},
+		{Command: model.ListNFTsByNameCommand, Description: "list NFTs with name filter"},
+		{Command: model.ListNFTsDefaultCommand, Description: "list NFTs without any filters"},
+
 		{Command: model.JetttonNewPoolsCommand, Description: "Detect new jetton pools created in the last 24 hours."},
 		{Command: model.FakeAccountCommand, Description: "Detect accounts that impersonate legitimate accounts with the same name."},
 		{Command: model.FakeJettonCommand, Description: "Detect fake jettons that mimic real tokens."},
@@ -83,25 +98,44 @@ func (s *Service) init() {
 	if _, err := s.bot.Request(newCommands); err != nil {
 		log.Println("Unable to set commands" + err.Error())
 	}
+	//command
 	s.commandFunctions[model.StartCommand] = s.handleStartCommand
 	s.commandFunctions[model.FakeCommand] = s.handleFakeCommand
-	s.commandFunctions[model.FakeAccountCommand] = s.handleFakeTypeCommand
-	s.commandFunctions[model.FakeJettonCommand] = s.handleFakeTypeCommand
-	s.commandFunctions[model.FakeNFTCommand] = s.handleFakeTypeCommand
+	s.commandFunctions[model.ListCommand] = s.handleListCommand
+	s.commandFunctions[model.FakeAccountCommand] = s.handleFakeAccountCommand
+	s.commandFunctions[model.FakeJettonCommand] = s.handleFakeJettonCommand
+	s.commandFunctions[model.FakeNFTCommand] = s.handleFakeNFTCommand
 	s.commandFunctions[model.JettonHolderCommand] = s.handleJettonHoldersCommand
 	s.commandFunctions[model.JettonsCommand] = s.handleJettonsCommand
+	s.commandFunctions[model.ListJettonsCommand] = s.handleListJettonsCommand
+	s.commandFunctions[model.ListJettonsByNameCommand] = s.handleListJettonsByNameCommand
+	s.commandFunctions[model.ListJettonsDefaultCommand] = s.handleListJettonsDefaultCommand
+	s.commandFunctions[model.ListAccountsCommand] = s.handleListAccountsCommand
+	s.commandFunctions[model.ListAccountsByNameCommand] = s.handleListAccountsByNameCommand
+	s.commandFunctions[model.ListAccountsDefaultCommand] = s.handleListAccountsDefaultCommand
 	s.commandFunctions[model.JetttonNewPoolsCommand] = s.handle24HJettonNewPoolsCommand
 	s.commandFunctions[model.JettonAmountCommand] = s.handleJettonAmountCommand
 	s.commandFunctions[model.JettonChangesCommand] = s.handleJettonChangeCommand
 	s.commandFunctions[model.JettonTopHoldersCommand] = s.handleJettonTopNCommand
 	s.commandFunctions[model.JettonBalanceCommand] = s.handleJettonBalanceCommand
 	s.commandFunctions[model.NFTCollectionCommand] = s.handleNFTCollectionCommand
+
+	s.commandFunctions[model.ListNFTsCommand] = s.handleListNFTsCommand
+	s.commandFunctions[model.ListNFTsByNameCommand] = s.handleListNFTsByNameCommand
+	s.commandFunctions[model.ListNFTsDefaultCommand] = s.handleListNFTsDefaultCommand
 	s.commandFunctions[model.NFTItemCommand] = s.handleNFTItemCommand
 	s.commandFunctions[model.NFTAssetCommand] = s.handleNFTAssetsCommand
 	s.commandFunctions[model.NFTCommand] = s.handleNFTsCommand
 	s.commandFunctions[model.HoneyPotCommand] = s.handleHoneyPotCommand
 	s.commandFunctions[model.HelpCommand] = s.handleHelpCommand
 
+	//callback
+	s.replyFunctions[model.ListNFTsDefaultCommand] = s.replyListNFTsByNameCommand
+	s.replyFunctions[model.ListNFTsByNameCommand] = s.replyListNFTsByNameCommand
+	s.replyFunctions[model.ListJettonsDefaultCommand] = s.replyListJettonsByNameCommand
+	s.replyFunctions[model.ListJettonsByNameCommand] = s.replyListJettonsByNameCommand
+	s.replyFunctions[model.ListAccountsByNameCommand] = s.replyListAccountsByNameCommand
+	s.replyFunctions[model.ListAccountsByNameCommand] = s.replyListAccountsByNameCommand
 	s.replyFunctions[model.FakeAccountCommand] = s.replyFakeAccountCommand
 	s.replyFunctions[model.FakeJettonCommand] = s.replyFakeJettonCommand
 	s.replyFunctions[model.FakeNFTCommand] = s.replyFakeNFTCommand
@@ -119,6 +153,9 @@ func (s *Service) init() {
 	s.pageFunctions[model.NFTAssetCommand] = s.replyNFTAssetsPage
 	s.pageFunctions[model.JettonTopHoldersCommand] = s.replyJettonTopNPage
 	s.pageFunctions[model.JetttonNewPoolsCommand] = s.reply24HJettonNewPoolsCommand
+	s.pageFunctions[model.ListJettonsCommand] = s.replyListJettonsPage
+	s.pageFunctions[model.ListNFTsCommand] = s.replyListNFTsPage
+	s.pageFunctions[model.ListAccountsCommand] = s.replyListAccountsPage
 }
 func (s *Service) Start() {
 	s.init()

@@ -7,72 +7,136 @@ import (
 	"gopkg.in/yaml.v3"
 	"log"
 	"net/http"
+	"regexp"
 	"strings"
 	"sync"
 	"ttv-bot/model"
 )
 
-type ValidCache struct {
-	addressMap  map[string]string
-	nameMap     map[string]*model.TonAddr
-	initAccount sync.Once
-	initNFT     sync.Once
-	initJetton  sync.Once
+type ValidAccountsCache struct {
+	addressMap map[string]string
+	nameMap    map[string]*model.TonAddr
+	init       sync.Once
 }
 
-func NewValidCache() *ValidCache {
-	return &ValidCache{
+type ValidNFTsCache struct {
+	addressMap map[string]string
+	nameMap    map[string]*model.TonAddr
+	init       sync.Once
+}
+
+type ValidJettonsCache struct {
+	addressMap map[string]string
+	nameMap    map[string]*model.TonAddr
+	init       sync.Once
+}
+
+func NewValidAccountsCache() *ValidAccountsCache {
+	return &ValidAccountsCache{
 		nameMap:    make(map[string]*model.TonAddr),
 		addressMap: make(map[string]string),
 	}
 }
 
-func (v *ValidCache) initializeAccounts() {
-	v.initAccount.Do(func() {
+func NewValidJettonsCache() *ValidJettonsCache {
+	return &ValidJettonsCache{
+		nameMap:    make(map[string]*model.TonAddr),
+		addressMap: make(map[string]string),
+	}
+}
+
+func NewValidNFTsCache() *ValidNFTsCache {
+	return &ValidNFTsCache{
+		nameMap:    make(map[string]*model.TonAddr),
+		addressMap: make(map[string]string),
+	}
+}
+func (v *ValidAccountsCache) initializeAccounts() {
+	v.init.Do(func() {
 		getAddressNameMap(v.nameMap, v.addressMap, "tonkeeper", "ton-assets", "accounts")
 	})
 }
 
-func (v *ValidCache) initializeJettons() {
-	v.initJetton.Do(func() {
+func (v *ValidJettonsCache) initializeJettons() {
+	v.init.Do(func() {
 		getAddressNameMap(v.nameMap, v.addressMap, "tonkeeper", "ton-assets", "jettons")
 	})
 }
 
-func (v *ValidCache) initializeNFTs() {
-	v.initNFT.Do(func() {
+func (v *ValidNFTsCache) initializeNFTs() {
+	v.init.Do(func() {
 		getAddressNameMap(v.nameMap, v.addressMap, "tonkeeper", "ton-assets", "collections")
 	})
 }
 
-func (v *ValidCache) GetAccountAddressByName(name string) *model.TonAddr {
+func (v *ValidAccountsCache) GetAccountAddressByName(name string) *model.TonAddr {
 	v.initializeAccounts()
 	return v.nameMap[name]
 }
 
-func (v *ValidCache) GetAccountNameByAddress(addr *model.TonAddr) string {
+func (v *ValidAccountsCache) GetAccountNameByAddress(addr *model.TonAddr) string {
 	v.initializeAccounts()
 	return v.addressMap[addr.Hex]
 }
 
-func (v *ValidCache) GetJettonAddressByName(name string) *model.TonAddr {
+func (v *ValidJettonsCache) GetJettonAddressByName(name string) *model.TonAddr {
 	v.initializeJettons()
 	return v.nameMap[name]
 }
 
-func (v *ValidCache) GetJettonNameByAddress(addr *model.TonAddr) string {
+func (v *ValidJettonsCache) GetJettonNameByAddress(addr *model.TonAddr) string {
 	v.initializeJettons()
 	return v.addressMap[addr.Hex]
 }
 
-func (v *ValidCache) GetNFTAddressByName(name string) *model.TonAddr {
+func (v *ValidNFTsCache) GetNFTAddressByName(name string) *model.TonAddr {
 	v.initializeNFTs()
 	return v.nameMap[name]
 }
 
-func (v *ValidCache) GetNFTNameByAddress(addr *model.TonAddr) string {
+func (v *ValidNFTsCache) GetNFTNameByAddress(addr *model.TonAddr) string {
 	v.initializeNFTs()
 	return v.addressMap[addr.Hex]
+}
+
+func (v *ValidAccountsCache) GetAll() map[string]*model.TonAddr {
+	v.initializeAccounts()
+	return v.nameMap
+}
+
+func (v *ValidNFTsCache) GetAll() map[string]*model.TonAddr {
+	v.initializeNFTs()
+	return v.nameMap
+}
+
+func (v *ValidJettonsCache) GetAll() map[string]*model.TonAddr {
+	v.initializeJettons()
+	return v.nameMap
+}
+
+func FuzzGetCache(name string, nameMap map[string]*model.TonAddr) map[string]*model.TonAddr {
+	ret := make(map[string]*model.TonAddr)
+	normalizedName := Normalize(name)
+	for n, addr := range nameMap {
+		if strings.Contains(Normalize(n), normalizedName) {
+			ret[n] = addr
+		}
+	}
+	return ret
+}
+func (v *ValidAccountsCache) FuzzyGET(name string) map[string]*model.TonAddr {
+	v.initializeAccounts()
+	return FuzzGetCache(name, v.nameMap)
+}
+
+func (v *ValidNFTsCache) FuzzyGET(name string) map[string]*model.TonAddr {
+	v.initializeNFTs()
+	return FuzzGetCache(name, v.nameMap)
+}
+
+func (v *ValidJettonsCache) FuzzyGET(name string) map[string]*model.TonAddr {
+	v.initializeJettons()
+	return FuzzGetCache(name, v.nameMap)
 }
 
 type GitHubContent struct {
@@ -160,4 +224,11 @@ func getAddressNameMap(nameMap map[string]*model.TonAddr, addressMap map[string]
 			}
 		}
 	}
+}
+
+func Normalize(input string) string {
+	// 正则表达式：匹配所有非字母和数字的字符
+	re := regexp.MustCompile("[^a-zA-Z0-9]")
+	// 转为小写并去除非字母和数字字符
+	return re.ReplaceAllString(strings.ToLower(input), "")
 }

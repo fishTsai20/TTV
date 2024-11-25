@@ -8,7 +8,7 @@ import (
 
 func (s *Service) handleJettonAmountCommand(upmsg *api.Message) {
 	msg := api.NewMessage(upmsg.Chat.ID, "")
-	msg.Text = "🛰️	Please enter the *jetton master address*\n"
+	msg.Text = "🛰️	Please enter the *jetton master address, as shown in this example:\n" + model.EscapeMarkdownV2("EQBynBO23ywHy_CgarY9NK9FTz0yDsG82PtcbSTQgGoXwiuA") + "\n"
 	msg.ParseMode = api.ModeMarkdown
 	s.SendMessage(msg)
 }
